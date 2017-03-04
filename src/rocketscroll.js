@@ -137,27 +137,28 @@ function RocketScroll(element,options){
 		
 	}
 	
-	//main els we worry about.
-	this.container = query('#' + this.el.id + ' .rs-container');
-	this.content = query('#' + this.el.id + ' .rs-content');
-	this.scrollbar = query('#' + this.el.id + ' .rs-scrollbar');
-	this.handle = query('#' + this.el.id + ' .rs-handle');
-	
-	this.refresh();
-	this.bindEvents();
-	this.SELECTION_TIMEOUT = false;
+	this.init();
 	
 };
 
 var RocketScrollPrototype = {
 	
-	bindEvents : function(){
+	init: function(){
+		this.container = query('#' + this.el.id + ' .rs-container');
+		this.content = query('#' + this.el.id + ' .rs-content');
+		this.scrollbar = query('#' + this.el.id + ' .rs-scrollbar');
+		this.handle = query('#' + this.el.id + ' .rs-handle');
+		this.bind();
+		this.refresh();
+	},
+	
+	bind: function(){
 		
-		var self = this;
+		var _self = this;
 
 		// Move handle on mouse scroll
 		this.container.onscroll = function(){
-			self.handle.style.marginTop = self.ratio * this.scrollTop + 'px';
+			_self.handle.style.marginTop = _self.ratio * _self.container.scrollTop + 'px';
 		};
 
 		// Just stop propagating click to scrollbar
@@ -167,31 +168,30 @@ var RocketScrollPrototype = {
 
 		// Detect when mouse is pressed
 		this.handle.onmousedown = function(e){
-
 			e.stopPropagation();
-			self.content.classList.add('rs-unselectable');
+			_self.content.classList.add('rs-unselectable');
 			enableSelection(false);
-			self.clientY = e.clientY;
-			self.scrollTop = self.container.scrollTop;
-			self.mouseDown = true;
+			_self.clientY = e.clientY;
+			_self.scrollTop = _self.container.scrollTop;
+			_self.mouseDown = true;
 
 		};
 		this.el.onmouseup = function(){
-			self.setMouseUpAndEnableSelection(self);
+			_self.setMouseUpAndEnableSelection(_self);
 		};
 
 		this.el.onmouseleave = function(){
-			self.setMouseUpAndEnableSelection(self);
+			_self.setMouseUpAndEnableSelection(_self);
 		};
 
 		// Handles mouse move, only when mouse is pressed
 		this.el.onmousemove = function(e){
 			// User is not holding mouse button
-			if(!self.mouseDown){
+			if(!_self.mouseDown){
 				return;
 			}
 
-			self.container.scrollTop = ((e.clientY - self.clientY) / self.ratio) + self.scrollTop;
+			_self.container.scrollTop = ((e.clientY - _self.clientY) / _self.ratio) + _self.scrollTop;
 		};
 
 		// Handles click on the scrollbar
@@ -200,25 +200,25 @@ var RocketScrollPrototype = {
 			e.stopPropagation(e);
 
 			// Moves center of the handle to the cursor
-			var layerY = getOffset(e) - self.handle.clientHeight / 2;
+			var layerY = getOffset(e) - _self.handle.clientHeight / 2;
 
-			self.container.scrollTop = layerY / self.totalHandle * self.totalScrollable;
+			_self.container.scrollTop = layerY / _self.totalHandle * _self.totalScrollable;
 		};
 
 		// Dirty fix for chrome/webkit browsers where you can scroll left by selecting text
 		this.el.onscroll = function(e){
 			e.preventDefault();
-			self.el.scrollLeft = 0;
+			_self.el.scrollLeft = 0;
 		};
 		
 		var _self = this;
 		var observer = new MutationObserver(function(){
-			self.refresh();
+			_self.refresh();
 		});
-		observer.observe(this.el,{
+		observer.observe(_self.content,{
 			childList: true,
 			subtree: true,
-			attributes: false,
+			attributes: true,
 			characterData: false,
 		});
 	},
@@ -233,19 +233,12 @@ var RocketScrollPrototype = {
 			enableSelection(true);
 		}, 500);
 	},
-	
-	setWidth: function(){
-		this.container.style.width = this.el.clientWidth + 50 + 'px';
-		this.content.style.width = this.el.clientWidth + 'px';
-	},
 
 	refresh: function(){
 
-		var i;
-
 		// Refresh multiple elements
 		if(this.multiple){
-			for(i in this.elements){
+			for(var i in this.elements){
 				this.elements[i].refresh();
 			}
 			return;
@@ -266,30 +259,8 @@ var RocketScrollPrototype = {
 		// Should be called on content change
 		this.totalScrollable = this.content.clientHeight - this.container.clientHeight;
 		this.totalHandle = this.scrollbar.clientHeight - this.handle.clientHeight;
-
 		this.ratio = this.totalHandle / this.totalScrollable;
-
 		this.handle.style.marginTop = this.ratio * this.container.scrollTop + 'px';
-		this.setWidth();
-		this.refreshImages();
-	},
-
-	refreshImages: function() {
-		var images, self, i;
-
-		// Refresh after every image load
-		images = query('#' + this.el.id + ' .rs-content img');
-
-		if(images.length > 0){
-			self = this;
-			for(i = 0; i < images.length; i++){
-				images.item(i).onload = function(){
-					self.refresh();
-					// removing onload event
-					this.onload = null;
-				};
-			}
-		}
 	}
 	
 };
