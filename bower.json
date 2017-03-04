@@ -1,0 +1,18 @@
+{
+  "name": "rocketscroll",
+  "homepage": "https://github.com/r3wt/RocketScroll",
+  "authors": [
+    "r3wt <gmorris_89@outlook.com>"
+  ],
+  "description": "a fork of Stanko's RocketScroll library",
+  "main": "",
+  "keywords": [
+    "javascript","scrollbar","angular.js"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+	"npm-debug.log"
+  ]
+}

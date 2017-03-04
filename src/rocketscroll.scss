@@ -1,0 +1,61 @@
+.rs{
+	overflow: hidden !important;
+	position: relative;
+
+	.rs-container{
+		overflow-y: scroll;
+		height: 100%;
+	}
+	
+	.rs-content{
+		padding: 20px;
+	}
+
+	.rs-scrollbar {
+		position: absolute;
+		right: 6px;
+		top: 6px;
+		bottom: 6px;
+		background: transparent;
+		width: 6px;
+		border-radius: 3px;
+		transition: background-color 0.5s;
+		
+		&:hover{
+			cursor: pointer;
+		}
+	}
+
+	.rs-handle{
+		height: 100px;
+		width: 6px;
+		border-radius: 3px;
+		background: transparent;
+		transition: background-color 0.5s;
+		
+		&:hover{
+			background: #777;
+			background: rgba(0,0,0,0.55);
+		}
+		
+	}
+
+	&:hover{
+		.rs-scrollbar{
+			background: #ddd;
+			background: rgba(0,0,0,0.15);
+			
+			.rs-handle:not(:hover){
+				background: #aaa;
+				background: rgba(0,0,0,0.35);
+			}
+		}
+	}
+
+	.rs-unselectable {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+}
