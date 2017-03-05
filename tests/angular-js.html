@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>RocketScroll: Angular.js Directive Test</title>
+		<link rel="stylesheet" href="../dist/rocketscroll.min.css">
+		<style>
+			*,*:before,*:after {
+				box-sizing: border-box;
+			}
+			body,html{
+				margin: 0;
+				padding: 0;
+			}
+			#scrollme{
+				height: 250px;
+				width: 300px;
+				margin: 50px;
+				border: 1px solid red;
+			}
+			.content-item{
+				width: 100%;
+				margin-bottom: 18px;
+			}
+			.body-div{
+				height: 150px;
+				width: 100%;
+			}
+			img.responsive{
+				max-width: 100%;
+				height: auto;
+				display: block;
+			}
+		</style>
+	</head>
+	<body ng-app="app">
+		<div ng-controller="TestCtrl">
+			<div id="scrollme" ng-rocketscroll rocketscroll-options="options" rocketscroll-instance="instance">
+				<div class="content-item" ng-repeat="item in items"><img class="responsive" ng-src="http://lorempizza.com/380/240" /></div>
+			</div>
+		</div>
+		
+		
+		<script src="../3rdparty/angular.js"></script>
+		<script src="../dist/rocketscroll.min.js"></script>
+		<script src="../src/ng-rocketscroll.js"></script>
+		
+		<script>
+			angular
+			.module('app',['ng-rocketscroll'])
+			.controller('TestCtrl',function($scope,$timeout){
+				console.log('test controller runs');
+				
+				$scope.options = {
+					foo: true
+				};
+				$scope.items = [];
+				$scope.instance = null;
+				$timeout(function(){
+					console.log($scope);
+				},100);
+				
+				var j = 0;
+				for(var i=0;i<20;i++){
+					$timeout(function(){
+						++j;
+						$scope.items.push(j);
+					},100 * i);
+				}
+				
+			})
+			.run();
+		</script>
+	</body>
+</html>

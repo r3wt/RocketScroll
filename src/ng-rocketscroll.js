@@ -1,27 +1,18 @@
 !function(angular){
 	angular
 	.module('ng-rocketscroll',[])
-	.directive('ngRocketScroll',function($timeout){
+	.directive('ngRocketscroll',function($timeout){
 		return {
 			restrict: 'A',
-			link: function(scope,element,attrs){
-				//todo parse options for-realzies
-				var instance = new RocketScroll(angular.element(element)[0],{ wrapContents: false });// dont wrap element in template. well do it manually
-				var timeout = null;
-				scope.$watch(function(){
-					
-					return element.find('.rs-content')[0].offsetHeight;
-					
-				},
-				function(){
-					if(timeout != null){
-						$timeout.cancel(timeout);
-						timeout = null;
-					}
-					$timeout(function(){
-						instance.refresh();
-					},100);
-				});
+			link:function(scope,element,attrs){
+				scope.rocketscrollInstance = new RocketScroll( 
+					angular.element(element)[0], 
+					angular.extend({}, scope.rocketscrollOptions || {} , { wrapContents: false }) 
+				);
+			},
+			scope: {
+				rocketscrollOptions:'=',//directive doubles as an options object
+				rocketscrollInstance:'=',//allow user to define a scope property they can use to retrieve plugin instance.
 			},
 			transclude: true,
 			template: '<div class="rs-container"><div class="rs-content" ng-transclude></div></div><div class="rs-scrollbar"><div class="rs-handle"></div>'
