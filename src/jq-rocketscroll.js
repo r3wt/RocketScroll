@@ -11,6 +11,7 @@
 			var instance = new RocketScroll( element.get(0),arguments );
 			
 			//convenience methods for teh noobz
+			//these should be implemented in respective plugins/modules to take advantage of 
 			instance.scrollTo = function( position,duration, cb ){
 				$(instance.container).animate({ scrollTop: position||instance.content.clientHeight }, duration||0, cb || function(){});
 			};

@@ -9,6 +9,12 @@
 					angular.element(element)[0], 
 					angular.extend({}, scope.rocketscrollOptions || {} , { wrapContents: false }) 
 				);
+				
+				//maybe add a convenience event emitter/scrollTo method here.
+				
+				scope.$on('$destroy',function(){
+					scope.rocketscrollInstance.destroy();
+				});
 			},
 			scope: {
 				rocketscrollOptions:'=',//directive doubles as an options object

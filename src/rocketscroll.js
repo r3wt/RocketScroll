@@ -9,16 +9,19 @@
 
 ;!function(window,document){
 	
+// this is the core package. it provides only the scrollbar component.
+// no scrollto or destroy methods. 
+// the reasoning is to allow people to build plugins specific to their framework's facilities ( jQuery/angular.js/react, etal )
+	
 //vars
 
 var originalOnselectstart = false;
-
 var __id = 0;//when autogen ids, we use a simple counter.
-
-// the default plugin options
 var defaults = {
-	wrapContents: true
-};
+	wrapContents: true,
+	alwaysShow: false,
+	
+} ;// the default plugin options
 
 //functions
 function getScrollTop(){
@@ -208,15 +211,34 @@ var RocketScrollPrototype = {
 		};
 		
 		var _self = this;
-		var observer = new MutationObserver(function(){
+		this.observer = new MutationObserver(function(){
 			_self.refresh();
 		});
-		observer.observe(_self.content,{
+		this.observer.observe(this.content,{
 			childList: true,
 			subtree: true,
 			attributes: true,
 			characterData: false,
 		});
+	},
+	
+	destroy: function(){
+		
+		var _self = this;
+		
+		_self.observer.disconnect();
+		var clone = _self.el.cloneNode();
+		while (_self.el.firstChild) {
+		  clone.appendChild(_self.el.lastChild);
+		}
+		_self.el.parentNode.replaceChild(clone, _self.el);
+		_self.el = clone;
+		_self.el.innerHTML = _self.content.innerHTML;
+		//now delete it all.
+		for(var prop in _self){
+			delete _self[prop];
+		}
+		
 	},
 
 	setMouseUpAndEnableSelection: function(instance){
