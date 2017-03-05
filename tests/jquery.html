@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>RocketScroll: jQuery Plugin Test</title>
+		<link rel="stylesheet" href="../dist/rocketscroll.min.css">
+		<style>
+			*,*:before,*:after {
+				box-sizing: border-box;
+			}
+			body,html{
+				margin: 0;
+				padding: 0;
+			}
+			#scrollme{
+				height: 250px;
+				width: 300px;
+				margin: 50px;
+				border: 1px solid red;
+			}
+			.content-item{
+				width: 100%;
+				margin-bottom: 18px;
+			}
+			.body-div{
+				height: 150px;
+				width: 100%;
+			}
+			img.responsive{
+				max-width: 100%;
+				height: auto;
+				display: block;
+			}
+		</style>
+	</head>
+	<body ng-app="app">
+	
+		<div id="scrollme"></div>
+		
+		<script src="../3rdparty/jquery.min.js"></script>
+		<script src="../dist/rocketscroll.min.js"></script>
+		<script src="../dist/jq-rocketscroll.min.js"></script>
+		
+		<script>
+			$(function(){
+			
+				var instance = $('#scrollme').rocketScroll().rocketScroll('getInstance');
+				console.log(instance);
+				for(var i=0;i<20;i++){
+					setTimeout(function(){
+						$(instance.content).append('<div class="content-item"><img class="responsive" src="http://lorempizza.com/380/240" /></div>');
+					},100 * i);
+				}
+				
+			});
+		</script>
+	</body>
+</html>
