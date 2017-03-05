@@ -107,17 +107,13 @@ function RocketScroll(element,options){
 		this.el = query(element);
 	}
 
-	// If selector return node list apply scroll to each node
+	// If selector return node list we will abort
+	// It makes sense to handle multiple instances at higher levels only.
+	// If we handle it here, it is incompatible with jQuery. not good.
 	if(this.el instanceof NodeList){
-		this.elements = [];
-		for(var i = 0; i < this.el.length; i++){
-			this.elements.push( new RocketScroll(this.el.item(i) , true) );
-		}
-		this.multiple = true;
-		return;
+		console.warn('RocketScroll expected HTMLElement but Got NodeList instead. You may instantiate on one element at a time only.');
+		return null;
 	}
-	
-	this.multiple = false;
 
 	// Adds ID to the element if there is none
 	if(!this.el.id){
@@ -235,14 +231,6 @@ var RocketScrollPrototype = {
 	},
 
 	refresh: function(){
-
-		// Refresh multiple elements
-		if(this.multiple){
-			for(var i in this.elements){
-				this.elements[i].refresh();
-			}
-			return;
-		}
 
 		// If content is smaller than the container
 		if(this.container.clientHeight > this.content.clientHeight){

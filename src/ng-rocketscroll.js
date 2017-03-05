@@ -1,7 +1,7 @@
 !function(angular){
 	angular
 	.module('ng-rocketscroll',[])
-	.directive('ngRocketscroll',function($timeout){
+	.directive('ngRocketscroll',function(){
 		return {
 			restrict: 'A',
 			link:function(scope,element,attrs){
