@@ -11,7 +11,6 @@
 				);
 				
 				//maybe add a convenience event emitter/scrollTo method here.
-				
 				scope.$on('$destroy',function(){
 					scope.rocketscrollInstance.destroy();
 				});

@@ -1,0 +1,29 @@
+*,*:before,*:after {
+	box-sizing: border-box;
+}
+body,html{
+	margin: 0;
+	padding: 0;
+}
+#scrollme{
+	height: 250px;
+	width: 300px;
+	margin: 50px;
+	border: 1px solid red;
+}
+.content-item{
+	width: 100%;
+	margin-bottom: 18px;
+}
+.content-item:last-child{
+	margin-bottom: 0px;
+}
+.body-div{
+	height: 150px;
+	width: 100%;
+}
+img.responsive{
+	max-width: 100%;
+	height: auto;
+	display: block;
+}

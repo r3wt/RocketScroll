@@ -20,7 +20,6 @@ var __id = 0;//when autogen ids, we use a simple counter.
 var defaults = {
 	wrapContents: true,
 	alwaysShow: false,
-	
 } ;// the default plugin options
 
 //functions
@@ -69,9 +68,9 @@ function enableSelection(enable) {
 	}
 }
 
-function query(s) {
-	var r = document.querySelectorAll(s);
-	return r.length === 1 ? r[0] : r;
+function query(needle, haystack) {
+	var result = (haystack||document).querySelectorAll(needle);
+	return result.length === 1 ? r[0] : r;
 }
 
 function detectIE(){
@@ -94,33 +93,18 @@ function extend(a,b){
 function RocketScroll(element,options){
 	// Don't enable it on touch screens
 	if('ontouchstart' in document.documentElement){
+        console.log('not binding on touch device.');
 		return;
 	}
 	
-	if(!(options instanceof Object)){
-		options = {};
-	}
-	
-	this.options = extend(defaults,options);
+	this.options = extend(defaults,options||{});
+    
+    this.el = element;
 
 	// Check if argument is element or selector
-	if(element instanceof HTMLElement){
-		this.el = element;
-	}else{
-		this.el = query(element);
-	}
-
-	// If selector return node list we will abort
-	// It makes sense to handle multiple instances at higher levels only.
-	// If we handle it here, it is incompatible with jQuery. not good.
-	if(this.el instanceof NodeList){
-		console.warn('RocketScroll expected HTMLElement but Got NodeList instead. You may instantiate on one element at a time only.');
-		return null;
-	}
-
-	// Adds ID to the element if there is none
-	if(!this.el.id){
-		this.el.id = 'rs-' + (__id++);
+	if(!(this.el instanceof HTMLElement)){
+		console.warn('invalid argument for element.');
+        return;
 	}
 
 	this.el.classList.add('rs');
@@ -140,13 +124,13 @@ function RocketScroll(element,options){
 	
 };
 
-var RocketScrollPrototype = {
+RocketScroll.prototype = {
 	
 	init: function(){
-		this.container = query('#' + this.el.id + ' .rs-container');
-		this.content = query('#' + this.el.id + ' .rs-content');
-		this.scrollbar = query('#' + this.el.id + ' .rs-scrollbar');
-		this.handle = query('#' + this.el.id + ' .rs-handle');
+		this.container = query('.rs-container',this.el);
+		this.content = query('.rs-content',this.el);
+		this.scrollbar = query('.rs-scrollbar');
+		this.handle = query('.rs-handle',this.el);
 		this.bind();
 		this.refresh();
 	},
@@ -274,8 +258,6 @@ var RocketScrollPrototype = {
 	}
 	
 };
-	
-RocketScroll.prototype = RocketScrollPrototype;
 
 window.RocketScroll = RocketScroll;
 
